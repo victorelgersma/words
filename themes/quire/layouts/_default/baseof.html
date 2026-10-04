@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="{{ site.Language.LanguageCode | default "en" }}"{{ if site.Params.garamond }} class="garamond"{{ end }}>
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body>
+  <header class="masthead">
+    <a class="site-title" href="{{ "/" | relURL }}">{{ site.Title }}</a>
+  </header>
+
+  <main>
+    {{ block "main" . }}{{ end }}
+  </main>
+
+  <footer class="colophon">
+    <p>
+      {{ with site.Params.author }}{{ . }} &middot; {{ end }}
+      <a href="{{ "index.xml" | relURL }}">RSS</a>
+    </p>
+  </footer>
+</body>
+</html>

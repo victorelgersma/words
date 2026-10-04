@@ -1,4 +1,8 @@
 baseURL = 'https://words.vjbe.net/'
 locale = 'en-gb'
 title = 'Words'
-theme = 'PaperMod'
+theme = 'quire'
+
+[params]
+  author = 'Victor Elgersma-Azmanov'
+  email = 'victor@vjbe.net'

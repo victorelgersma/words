@@ -1,0 +1,7 @@
+{{- /* Images: ![alt text](image.webp "Optional caption")
+       The quoted title becomes a caption. Uses spans so it stays valid inside the <p> Markdown wraps images in. */ -}}
+{{- if .Title -}}
+<span class="figure"><img src="{{ .Destination | safeURL }}" alt="{{ .Text }}" loading="lazy"><span class="caption">{{ .Title | markdownify }}</span></span>
+{{- else -}}
+<img src="{{ .Destination | safeURL }}" alt="{{ .Text }}" loading="lazy">
+{{- end -}}

@@ -1,0 +1,17 @@
+{{ define "main" }}
+<section class="intro">
+  {{ with .Content }}{{ . }}{{ else }}{{ with site.Params.description }}<p class="epigraph">{{ . }}</p>{{ end }}{{ end }}
+</section>
+
+<section class="contents">
+  <h2 class="contents-heading">Contents</h2>
+  <ol class="toc">
+    {{ range where site.RegularPages "Type" "posts" }}
+    <li>
+      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 January 2006" }}</time>
+    </li>
+    {{ end }}
+  </ol>
+</section>
+{{ end }}

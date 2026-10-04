@@ -1,0 +1,302 @@
+/* quire — a small literary theme for Hugo.
+   Layout after Edward Tufte's handouts: a narrow text column with notes in a wide right margin. */
+
+:root {
+  --paper: #fffff8;
+  --ink: #1b1b1b;
+  --muted: #6b6457;
+  --rule: #d9d3c4;
+  --accent: #7a1f1f;          /* oxblood, like sealing wax */
+  --serif: "Times New Roman", Times, "Liberation Serif", "Nimbus Roman", serif;
+
+  --text: 55%;                /* width of the text column */
+  --margin-gap: 60%;          /* how far notes sit into the right margin */
+  --note: 50%;                /* width of a margin note */
+}
+
+html.garamond { --serif: "EB Garamond", "Times New Roman", Times, serif; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #161512;
+    --ink: #e4ded1;
+    --muted: #9a917f;
+    --rule: #3a362e;
+    --accent: #d08a7a;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { font-size: 15px; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0 auto;
+  max-width: 1400px;
+  padding: 0 0 0 12.5%;
+  width: 87.5%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  line-height: 1.55;
+  font-kerning: normal;
+  font-variant-ligatures: common-ligatures oldstyle-nums;
+  text-rendering: optimizeLegibility;
+  counter-reset: sidenote-counter;
+}
+
+/* --- Masthead & colophon ------------------------------------------------ */
+
+.masthead { padding: 3rem 0 1rem; width: var(--text); }
+
+.site-title {
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  font-size: 1.15rem;
+  color: var(--accent);
+  text-decoration: none;
+}
+.site-title:hover { text-decoration: underline; text-underline-offset: 0.15em; }
+
+.colophon {
+  width: var(--text);
+  margin: 4rem 0 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  font-size: 1rem;
+  color: var(--muted);
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+}
+.colophon a { color: inherit; }
+
+/* --- Headings ----------------------------------------------------------- */
+
+h1, h2, h3 { font-weight: 400; line-height: 1.15; }
+
+h1 {
+  font-size: 2.6rem;
+  margin: 2.5rem 0 0.5rem;
+  width: var(--text);
+}
+
+h2 {
+  font-style: italic;
+  font-size: 1.7rem;
+  margin: 2.2rem 0 0.6rem;
+  width: var(--text);
+}
+
+h3 {
+  font-style: italic;
+  font-size: 1.4rem;
+  margin: 1.8rem 0 0.4rem;
+  width: var(--text);
+}
+
+.subtitle {
+  font-style: italic;
+  font-size: 1.6rem;
+  margin: 0.3rem 0 0;
+  width: var(--text);
+  color: var(--muted);
+}
+
+.dateline {
+  margin: 0.8rem 0 2.2rem;
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  font-size: 1.1rem;
+  color: var(--muted);
+}
+
+/* --- Body text ---------------------------------------------------------- */
+
+p, ul, ol, dl, blockquote, pre, table, .footnotes {
+  width: var(--text);
+}
+
+p { margin: 0 0 1rem; hyphens: auto; -webkit-hyphens: auto; }
+
+/* The opening line of an article, in small caps, as in old books */
+.prose > p:first-of-type::first-line {
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+a:hover { text-decoration-color: var(--accent); color: var(--accent); }
+
+ul, ol { padding-left: 1.4em; margin: 0 0 1rem; }
+li { margin-bottom: 0.3rem; }
+
+blockquote {
+  margin: 1.4rem 0;
+  padding: 0 0 0 1.5rem;
+  border-left: 1px solid var(--rule);
+  font-style: italic;
+}
+blockquote p { width: 100%; }
+
+hr {
+  border: 0;
+  width: var(--text);
+  margin: 2rem 0;
+  text-align: center;
+  color: var(--muted);
+}
+hr::before { content: "⁂"; font-size: 1.3rem; }
+
+img { max-width: 100%; height: auto; }
+
+/* Captioned images: ![alt](src "Caption") */
+.figure { display: block; margin: 1.5rem 0; }
+.figure img { display: block; width: 100%; }
+.caption {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1.35;
+  color: var(--muted);
+}
+p:has(> .figure:only-child)::first-line { font-variant: normal; letter-spacing: normal; }
+
+code, pre {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.85em;
+}
+pre { overflow-x: auto; padding: 0.8rem 1rem; background: color-mix(in srgb, var(--ink) 5%, transparent); }
+
+abbr, .smallcaps { font-variant: small-caps; letter-spacing: 0.04em; }
+
+::selection { background: color-mix(in srgb, var(--accent) 25%, transparent); }
+
+/* --- Sidenotes & margin notes ------------------------------------------ */
+
+.sidenote, .marginnote {
+  float: right;
+  clear: right;
+  margin-right: calc(-1 * var(--margin-gap));
+  width: var(--note);
+  margin-top: 0.3rem;
+  margin-bottom: 0;
+  font-size: 1.05rem;
+  line-height: 1.35;
+  vertical-align: baseline;
+  position: relative;
+  color: var(--muted);
+}
+
+.sidenote-number { counter-increment: sidenote-counter; }
+
+.sidenote-number::after,
+.sidenote::before {
+  position: relative;
+  vertical-align: baseline;
+  font-size: 0.7em;
+  top: -0.5rem;
+  color: var(--accent);
+}
+.sidenote-number::after { content: counter(sidenote-counter); left: 0.05rem; }
+.sidenote::before { content: counter(sidenote-counter) " "; }
+
+input.margin-toggle { display: none; }
+label.margin-toggle:not(.sidenote-number) { display: none; }
+label.sidenote-number { display: inline-block; max-height: 2rem; }
+
+/* --- Home page: a book's table of contents ----------------------------- */
+
+.intro { margin: 1rem 0 2.5rem; }
+.epigraph { font-style: italic; color: var(--muted); }
+
+.contents-heading, .list-title {
+  font-variant: small-caps;
+  font-style: normal;
+  letter-spacing: 0.1em;
+  font-size: 1.15rem;
+  color: var(--muted);
+  margin: 0 0 1rem;
+}
+.list-title { font-size: 1.3rem; margin-top: 2rem; }
+
+.toc { list-style: none; padding: 0; }
+.toc li {
+  display: flex;
+  align-items: last baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.7rem;
+}
+.toc li a { text-decoration: none; flex: 0 1 auto; }
+.toc li a:hover { text-decoration: underline; }
+/* dotted leader between title and date */
+.toc li::after { content: ""; order: 1; flex: 1; border-bottom: 1px dotted var(--rule); transform: translateY(-0.3em); min-width: 1.5rem; }
+.toc li time {
+  order: 2;
+  white-space: nowrap;
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+  font-size: 1.05rem;
+  color: var(--muted);
+}
+
+/* --- Article footer ---------------------------------------------------- */
+
+.tags { font-size: 1.05rem; color: var(--muted); font-style: italic; margin-top: 2.5rem; }
+
+.pager {
+  width: var(--text);
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: 2.5rem;
+  font-size: 1.05rem;
+}
+.pager .next { margin-left: auto; text-align: right; }
+
+/* Markdown footnotes ([^1]) get a quieter, smaller treatment */
+.footnotes { font-size: 1.05rem; color: var(--muted); margin-top: 3rem; }
+.footnotes hr { display: none; }
+.footnotes p, .footnotes ol { width: 100%; }
+
+/* --- Narrow screens: one column, notes revealed by tapping ------------- */
+
+@media (max-width: 760px) {
+  body { width: auto; padding: 0 1.1rem; font-size: 1.3rem; }
+  .masthead { padding-top: 1.75rem; }
+  h1 { margin-top: 1.5rem; }
+  .masthead, .colophon, h1, h2, h3, .subtitle, p, ul, ol, dl, blockquote, pre, table, hr, .footnotes, .pager { width: 100%; }
+  h1 { font-size: 2.1rem; }
+
+  /* Contents: title on its own line, date underneath, no leader */
+  .toc li { display: block; margin-bottom: 1.1rem; }
+  .toc li::after { content: none; }
+  .toc li time { display: block; font-size: 0.95rem; margin-top: 0.1rem; }
+
+  label.margin-toggle:not(.sidenote-number) { display: inline; color: var(--accent); cursor: pointer; font-size: 0.8em; padding: 0 0.15em; }
+  label.sidenote-number { cursor: pointer; }
+
+  .sidenote, .marginnote { display: none; }
+  .margin-toggle:checked + .sidenote,
+  .margin-toggle:checked + .marginnote {
+    display: block;
+    float: left;
+    left: 1rem;
+    clear: both;
+    width: 95%;
+    margin: 1rem 2.5%;
+    position: relative;
+  }
+}
+
+@media print {
+  :root { --paper: #fff; --ink: #000; }
+  .masthead, .colophon, .pager { display: none; }
+}
