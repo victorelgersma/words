@@ -18,6 +18,10 @@
   </p>
   {{ end }}
 
+  {{ with site.Params.email }}
+  <p class="reply">{{ $subject := replace (printf "Re: %s" $.Title | urlquery) "+" "%20" }}<a href="{{ printf "mailto:%s?subject=%s" . $subject | safeURL }}">Reply by email</a></p>
+  {{ end }}
+
   <nav class="pager">
     {{ with .PrevInSection }}<a class="prev" href="{{ .RelPermalink }}">&larr; {{ .Title }}</a>{{ end }}
     {{ with .NextInSection }}<a class="next" href="{{ .RelPermalink }}">{{ .Title }} &rarr;</a>{{ end }}
